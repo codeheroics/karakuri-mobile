@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingRight: 20,
     paddingLeft: 10,
-    elevation: 10,
   },
   headerText: {
     color: '#D9E4D7',
@@ -50,6 +49,7 @@ export class HomeHeader extends Component {
         <TouchableHighlight
           underlayColor="#333"
           onPress={this.openMenu}
+          style={{}}
         >
           <Icon
             name="navicon"

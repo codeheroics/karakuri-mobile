@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes, View } from 'react'
 import AlphabetListView from 'react-native-alphabetlistview'
 
 import { HomeRow } from './HomeRow'
@@ -36,7 +36,7 @@ export class HomeListView extends Component {
         cellHeight={100}
         cellProps={{ onPress: this.onGroupSelect }}
         pageSize={5}
-        sectionHeader={() => null}
+        sectionHeader={View}
         sectionHeaderHeight={0}
         sectionListStyle={alphabetListStyles}
       />
