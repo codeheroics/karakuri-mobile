@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Alert, BackHandler, ToastAndroid } from 'react-native'
 import Drawer from 'react-native-drawer'
-import { uniq } from 'lodash'
+import { toArray, uniq } from 'lodash'
 
 import { getContentsPerDirectories, getContentsPerGroups } from '../lib/contentsFormatter'
 
@@ -148,15 +148,21 @@ export class Home extends Component {
     const groupsPerLettersAndDirectories = Object.keys(contentsPerDirectories).reduce(
       (directoriesObj, dirName) => ({
         ...directoriesObj,
-        [dirName]: contentsPerDirectories[dirName].map(content => content.group).reduce(
-          (alphabetListObj, groupName) => {
-            const letter = groupName[0].toUpperCase()
-            return {
-              ...alphabetListObj,
-              [letter]: uniq((alphabetListObj[letter] || []).concat(groupName)),
-            }
-          },
-          {}
+        [dirName]: toArray(
+          contentsPerDirectories[dirName].map(content => content.group).reduce(
+            (alphabetListObj, groupName) => {
+              const letter = groupName[0].toUpperCase()
+              const previousData = (alphabetListObj[letter] || {}).data || []
+              return {
+                ...alphabetListObj,
+                [letter]: {
+                  data: uniq(previousData.concat(groupName)),
+                  key: letter,
+                },
+              }
+            },
+            {}
+          )
         ),
       }),
       {}
@@ -242,7 +248,6 @@ export class Home extends Component {
         tweenHandler={this.handleTween}
         styles={{
           drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3 },
-          main: { paddingLeft: 3 },
         }}
       >
         <HomeHeader
@@ -279,7 +284,6 @@ export class Home extends Component {
           tweenHandler={this.handleTween}
           styles={{
             drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3 },
-            main: { paddingLeft: 3 },
           }}
         >
           {!this.state.showPlaylist ? (

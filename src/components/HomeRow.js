@@ -5,7 +5,6 @@ import {
   Text,
   TouchableNativeFeedback,
   View,
-  Dimensions,
 } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -14,7 +13,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'stretch',
-    width: Dimensions.get('window').width - 40,
   },
   rowText: {
     fontSize: 16,

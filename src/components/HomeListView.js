@@ -1,18 +1,26 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import AlphabetListView from 'react-native-alphabetlistview'
+import { SectionList, View, Text } from 'react-native'
+import { identity } from 'lodash'
 
 import { HomeRow } from './HomeRow'
 
 const nullFn = () => null
 
-const alphabetListStyles = {
-  width: 40,
+const INITIAL_ROWS_TO_RENDER = 20
+
+const styles = {
+  sectionHeaderView: {
+    backgroundColor: '#000',
+    flex: 1,
+    alignItems: 'center',
+  },
+  sectionHeaderText: { color: '#FFF' },
 }
 
 export class HomeListView extends PureComponent {
   static propTypes = {
-    groups: PropTypes.object.isRequired,
+    groups: PropTypes.array.isRequired,
     directoryName: PropTypes.string.isRequired,
     onGroupSelect: PropTypes.func.isRequired,
   }
@@ -21,17 +29,24 @@ export class HomeListView extends PureComponent {
     this.props.onGroupSelect(group)
   };
 
+  renderItem = ({ item }) => (
+    <HomeRow item={item} onPress={this.onGroupSelect} />
+  )
+
+  renderSectionHeader = ({ section }) => (
+    <View style={styles.sectionHeaderView}>
+      <Text style={styles.sectionHeaderText}>{section.key}</Text>
+    </View>
+  )
+
   render() {
     return (
-      <AlphabetListView
-        data={this.props.groups}
-        cell={HomeRow}
-        cellHeight={50}
-        cellProps={{ onPress: this.onGroupSelect }}
-        pageSize={5}
-        sectionHeader={nullFn}
-        sectionHeaderHeight={0}
-        sectionListStyle={alphabetListStyles}
+      <SectionList
+        sections={this.props.groups}
+        renderItem={this.renderItem}
+        renderSectionHeader={this.renderSectionHeader}
+        keyExtractor={identity}
+        initialNumToRender={INITIAL_ROWS_TO_RENDER}
       />
     )
   }
