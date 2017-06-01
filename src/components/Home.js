@@ -8,7 +8,7 @@ import { getContentsPerDirectories, getContentsPerGroups } from '../lib/contents
 
 import { ContentsList } from './ContentsList'
 import { FilterList } from './FilterList'
-import { HomeListView } from './HomeListView'
+import { HomeSectionList } from './HomeSectionList'
 import { Menu } from './Menu'
 import { HomeHeader } from './HomeHeader'
 import { Playlist } from './Playlist'
@@ -287,7 +287,7 @@ export class Home extends Component {
           }}
         >
           {!this.state.showPlaylist ? (
-            <HomeListView
+            <HomeSectionList
               groups={this.state.groupsPerLettersAndDirectories[selectedDirectoryName]}
               directoryName={selectedDirectoryName}
               onGroupSelect={this.onGroupSelect}

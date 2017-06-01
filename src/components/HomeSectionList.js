@@ -18,7 +18,7 @@ const styles = {
   sectionHeaderText: { color: '#FFF' },
 }
 
-export class HomeListView extends PureComponent {
+export class HomeSectionList extends PureComponent {
   static propTypes = {
     groups: PropTypes.array.isRequired,
     directoryName: PropTypes.string.isRequired,
