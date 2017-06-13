@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { StackNavigator } from 'react-navigation'
+import { TabNavigator, StackNavigator } from 'react-navigation'
 import { flattenNavigationParamsProps } from './lib/navigationUtils'
 
 import * as screens from './constants/screens'
@@ -18,10 +18,32 @@ const store = configureStore()
 const AppNavigator = StackNavigator(
   {
     [screens.CONNECTION_SCREEN]: { screen: ConnectionScreen },
-    [screens.HOME_SCREEN]: { screen: HomeScreen },
-    [screens.BROWSE_SONGS_SCREEN]: { screen: flattenNavigationParamsProps(BrowseSongsScreen) },
-    [screens.SEARCH_SONGS_SCREEN]: { screen: flattenNavigationParamsProps(SearchSongsScreen) },
-    [screens.PLAYLIST_SCREEN]: { screen: flattenNavigationParamsProps(PlaylistScreen) },
+    [screens.MAIN_SCREEN_CONTAINER]: {
+      screen: StackNavigator(
+        {
+          [screens.MAIN_SCREEN]: {
+            screen: TabNavigator(
+              {
+                [screens.BROWSE_GROUPS_SCREEN]: { screen: HomeScreen },
+                [screens.PLAYLIST_SCREEN]: { screen: flattenNavigationParamsProps(PlaylistScreen) },
+              },
+              {
+                tabBarPosition: 'bottom',
+                swipeEnabled: true,
+                tabBarOptions: { scrollEnabled: true },
+              },
+            ),
+          },
+          [screens.BROWSE_SONGS_SCREEN]: {
+            screen: flattenNavigationParamsProps(BrowseSongsScreen),
+          },
+          [screens.SEARCH_SONGS_SCREEN]: {
+            screen: flattenNavigationParamsProps(SearchSongsScreen),
+          },
+        },
+        { headerMode: 'none' },
+      ),
+    },
   },
   { headerMode: 'none' },
 )
