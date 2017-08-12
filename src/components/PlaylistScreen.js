@@ -37,7 +37,7 @@ export class PlaylistScreen extends PureComponent {
   static defaultProps = { contents: [], randomizePlaylist: () => {} }
 
   static navigationOptions = {
-    tabBarLabel: 'Playlist',
+    drawerLabel: 'Playlist',
   }
 
   render() {
