@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import AlphabetListView from 'react-native-alphabetlistview'
 
 import { selectDirectory, selectGroup } from '../actions'
+import { getDirectories, getCurrentDirectoryGroupsPerLetter } from '../selectors/contents'
 
 import GroupRow from './GroupRow'
 import Menu from './Menu'
@@ -54,7 +55,13 @@ export class BrowseGroupsScreen extends Component {
   }
 }
 
-export default connect(({ contents }) => ({ ...contents }), {
-  selectDirectory,
-  selectGroup,
-})(BrowseGroupsScreen)
+export default connect(
+  state => ({
+    directories: getDirectories(state),
+    directoryGroups: getCurrentDirectoryGroupsPerLetter(state),
+  }),
+  {
+    selectDirectory,
+    selectGroup,
+  },
+)(BrowseGroupsScreen)
