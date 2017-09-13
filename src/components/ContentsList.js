@@ -83,8 +83,8 @@ export default class ContentsList extends Component {
     <ContentRow
       {...content}
       hideGroup={this.props.hideGroups}
-      showStar={this.props.showAddToPlaylist}
-      showPlus={this.props.showToggleFavorites}
+      showStar={this.props.showToggleFavorites}
+      showPlus={this.props.showAddToPlaylist}
       onPlusPress={this.props.onSelect}
       onStarPress={this.props.toggleFavorite}
     />
