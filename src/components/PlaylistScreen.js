@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { StyleSheet, View } from 'react-native'
 import Button from 'apsl-react-native-button'
 
-import { randomizePlaylist } from '../actions'
+import { randomizePlaylist, toggleFavorite } from '../actions'
 import { getMyPlaylistContents } from '../selectors/contents'
 
 import ContentsList from './ContentsList'
@@ -32,10 +32,11 @@ const styles = StyleSheet.create({
 export class PlaylistScreen extends PureComponent {
   static propTypes = {
     contents: PropTypes.array,
-    randomizePlaylist: PropTypes.func,
+    randomizePlaylist: PropTypes.func.isRequired,
+    toggleFavorite: PropTypes.func.isRequired,
   }
 
-  static defaultProps = { contents: [], randomizePlaylist: () => {} }
+  static defaultProps = { contents: [] }
 
   render() {
     const { contents } = this.props
@@ -45,8 +46,8 @@ export class PlaylistScreen extends PureComponent {
           <ContentsList
             contents={contents}
             showAddToPlaylist={false}
-            showToggleFavorites={false}
             title="My Playlist"
+            toggleFavorite={this.props.toggleFavorite}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -64,5 +65,6 @@ export class PlaylistScreen extends PureComponent {
 }
 
 export default connect(state => ({ contents: getMyPlaylistContents(state) }), {
+  toggleFavorite,
   randomizePlaylist,
 })(PlaylistScreen)
