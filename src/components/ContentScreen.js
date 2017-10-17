@@ -23,8 +23,10 @@ const styles = StyleSheet.create({
 
 export class ContentScreen extends PureComponent {
   static propTypes = {
+    addToPlaylist: PropTypes.func.isRequired,
     allContents: PropTypes.arrayOf(PropTypes.object).isRequired,
     contentId: PropTypes.string.isRequired,
+    toggleFavorite: PropTypes.func.isRequired,
   }
 
   render() {

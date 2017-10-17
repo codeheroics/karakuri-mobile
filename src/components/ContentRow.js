@@ -19,11 +19,11 @@ const languageCodes = {
 const styles = StyleSheet.create({
   row: {
     padding: 10,
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1 / PixelRatio.get(),
+    backgroundColor: '#272822',
   },
   textContainer: {
     flex: 1,
