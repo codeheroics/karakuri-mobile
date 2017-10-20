@@ -25,12 +25,12 @@ export class ContentScreen extends PureComponent {
   static propTypes = {
     addToPlaylist: PropTypes.func.isRequired,
     allContents: PropTypes.arrayOf(PropTypes.object).isRequired,
-    contentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     toggleFavorite: PropTypes.func.isRequired,
   }
 
   render() {
-    const content = this.props.allContents.find(c => c.id === this.props.contentId)
+    const content = this.props.allContents.find(c => c.id === this.props.id)
 
     if (!content) {
       return (
@@ -50,9 +50,8 @@ export class ContentScreen extends PureComponent {
 
         <ContentRow
           {...content}
-          goTo={nothingFn}
-          onStarPress={this.props.toggleFavorite}
           onPlusPress={this.props.addToPlaylist}
+          onStarPress={this.props.toggleFavorite}
         />
         <View style={styles.lyricsContainer}>
           {content.lyrics &&

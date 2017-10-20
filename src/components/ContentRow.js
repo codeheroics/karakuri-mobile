@@ -48,8 +48,9 @@ export default class ContentRow extends PureComponent {
     language: PropTypes.string,
     onPlusPress: PropTypes.func,
     onStarPress: PropTypes.func,
-    showStar: PropTypes.bool,
+    onTitlePress: PropTypes.func,
     showPlus: PropTypes.bool,
+    showStar: PropTypes.bool,
     songName: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
   }
@@ -60,6 +61,7 @@ export default class ContentRow extends PureComponent {
     hideGroup: false,
     onPlusPress: () => {},
     onStarPress: () => {},
+    onTitlePress: () => {},
     showPlus: true,
     showStar: true,
   }
@@ -68,10 +70,11 @@ export default class ContentRow extends PureComponent {
 
   onStarPress = () => this.props.onStarPress(this.props.id)
 
+  onTitlePress = () => this.props.onTitlePress(this.props.id)
+
   render() {
     const {
       group,
-      goTo,
       hideGroup,
       isFavorite,
       language,
@@ -97,7 +100,7 @@ export default class ContentRow extends PureComponent {
         <View style={styles.iconsContainer}>
           <Flag code={languageCodes[language] || 'unknown'} size={24} type="flat" />
         </View>
-        <TouchableNativeFeedback style={styles.textContainer} onPress={goTo}>
+        <TouchableNativeFeedback style={styles.textContainer} onPress={this.onTitlePress}>
           <Text style={styles.text}>
             {!hideGroup && `${group} - `}
             {type} - {songName}
