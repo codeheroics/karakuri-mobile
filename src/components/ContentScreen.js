@@ -1,5 +1,13 @@
 import React, { PureComponent } from 'react'
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native'
+import Icon from 'react-native-vector-icons/Entypo'
 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -10,6 +18,7 @@ import { getAllContents } from '../selectors/contents'
 import ContentRow from './ContentRow'
 
 const { width } = Dimensions.get('window')
+const nothingFn = () => {}
 
 const styles = StyleSheet.create({
   container: {
@@ -29,6 +38,23 @@ const styles = StyleSheet.create({
   },
   lyricsLine: {
     textAlign: 'center',
+  },
+  reportTouchableFeedback: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  reportContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: 5,
+  },
+  reportIcon: {
+    color: 'red',
+  },
+  reportText: {
+    color: 'red',
   },
 })
 
@@ -80,8 +106,18 @@ export class ContentScreen extends PureComponent {
         <ContentRow
           {...content}
           onPlusPress={this.props.addToPlaylist}
+          onReportPress={nothingFn}
           onStarPress={this.props.toggleFavorite}
         />
+        <TouchableNativeFeedback
+          onPress={this.onReportPress}
+          style={styles.reportTouchableFeedback}
+        >
+          <View style={styles.reportContainer}>
+            <Icon name="warning" size={30} style={styles.reportIcon} />
+            <Text style={styles.reportText}>Report</Text>
+          </View>
+        </TouchableNativeFeedback>
         <ScrollView contentContainerStyle={styles.lyricsContentContainer} style={styles.lyrics}>
           {lyrics &&
             lyrics.map((lyricsLine, key) => (
