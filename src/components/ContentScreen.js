@@ -1,23 +1,34 @@
 import React, { PureComponent } from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native'
+
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Video from 'react-native-video'
 
 import { addToPlaylist, toggleFavorite } from '../actions'
+import { getAllContents } from '../selectors/contents'
 import ContentRow from './ContentRow'
 
 const { width } = Dimensions.get('window')
-const nothingFn = () => {}
 
 const styles = StyleSheet.create({
-  videoStyle: {
+  container: {
+    flex: 1,
+  },
+  video: {
     width,
     height: 200,
     backgroundColor: '#000',
   },
-  lyricsContainer: {
+  lyrics: {
+    flex: 1,
+  },
+  lyricsContentContainer: {
     alignItems: 'center',
+    padding: 5,
+  },
+  lyricsLine: {
+    textAlign: 'center',
   },
 })
 
@@ -27,10 +38,32 @@ export class ContentScreen extends PureComponent {
     allContents: PropTypes.arrayOf(PropTypes.object).isRequired,
     id: PropTypes.string.isRequired,
     toggleFavorite: PropTypes.func.isRequired,
+    url: PropTypes.string.isRequired,
   }
 
-  render() {
+  constructor(props) {
+    super(props)
+
+    this.state = { content: null, lyrics: [] }
+  }
+
+  componentWillMount() {
     const content = this.props.allContents.find(c => c.id === this.props.id)
+    if (content) {
+      this.setState({ content })
+      this.getLyrics(content)
+    }
+  }
+
+  getLyrics = ({ id }) =>
+    fetch(this.props.url.concat(`/contents/${id}`))
+      .then(response => response.json())
+      .then(({ lyrics }) => this.setState({ lyrics }))
+      .catch(err => console.error(err))
+
+  render() {
+    const { content, lyrics } = this.state
+    const { url } = this.props
 
     if (!content) {
       return (
@@ -41,24 +74,25 @@ export class ContentScreen extends PureComponent {
     }
 
     return (
-      <View>
-        <Video
-          source={{ uri: `http://192.168.0.20:3000/${content.path}` }}
-          resizeMode="cover"
-          style={styles.videoStyle}
-        />
+      <View style={styles.container}>
+        <Video source={{ uri: `${url}/${content.path}` }} resizeMode="cover" style={styles.video} />
 
         <ContentRow
           {...content}
           onPlusPress={this.props.addToPlaylist}
           onStarPress={this.props.toggleFavorite}
         />
-        <View style={styles.lyricsContainer}>
-          {content.lyrics &&
-            content.lyrics.map((lyricsLine, key) => (
-              <Text key={key}>{lyricsLine}</Text> // eslint-disable-line
+        <ScrollView contentContainerStyle={styles.lyricsContentContainer} style={styles.lyrics}>
+          {lyrics &&
+            lyrics.map((lyricsLine, key) => (
+              <Text
+                style={styles.lyricsLine}
+                key={key} // eslint-disable-line react/no-array-index-key
+              >
+                {lyricsLine}
+              </Text>
             ))}
-        </View>
+        </ScrollView>
         <View />
       </View>
     )
@@ -66,8 +100,9 @@ export class ContentScreen extends PureComponent {
 }
 
 export default connect(
-  ({ contents: { allContents } }) => ({
-    allContents,
+  state => ({
+    allContents: getAllContents(state),
+    url: state.connection.url,
   }),
   { addToPlaylist, toggleFavorite },
 )(ContentScreen)
